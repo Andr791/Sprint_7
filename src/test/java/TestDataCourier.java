@@ -1,16 +1,16 @@
-public class Courier {
+public class TestDataCourier {
 
     private String login;
     private String password;
     private String firstName;
 
-    public Courier(String login, String password, String firstName) {
+    public TestDataCourier(String login, String password, String firstName) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
     }
 
-    public Courier() {
+    public TestDataCourier() {
     }
 
     public String getLogin() {

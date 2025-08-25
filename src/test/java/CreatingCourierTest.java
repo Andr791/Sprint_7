@@ -15,7 +15,7 @@ public class CreatingCourierTest {
 
     @Test
     public void creatingCourierPozitive() {
-        Courier courier = new Courier("Klinikov4", "10458617", "Andrey");
+        TestDataCourier courier = new TestDataCourier("Klinikov4", "10458617", "Andrey");
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -27,21 +27,17 @@ public class CreatingCourierTest {
                 .and()
                 .statusCode(201);
 
-        String json = "{\"login\": \"" + courier.getLogin() + "\", \"password\": \"" + courier.getPassword() + "\"}";
+        TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
         int id =
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(json)
+                        .body(login)
                         .when()
                         .post("/api/v1/courier/login").then().extract().body().path("id");
 
         Response responseDelete =
                 given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
                         .delete("/api/v1/courier/{id}", id);
         responseDelete.then().assertThat().body("ok", equalTo(true))
                 .and()
@@ -50,7 +46,7 @@ public class CreatingCourierTest {
 
     @Test
     public void creatingCourierPovtor() {
-        Courier courier = new Courier("Klinikov7", "10458617", "Andrey");
+        TestDataCourier courier = new TestDataCourier("Klinikov7", "10458617", "Andrey");
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -73,21 +69,17 @@ public class CreatingCourierTest {
                 .and()
                 .statusCode(409);
 
-        String json = "{\"login\": \"" + courier.getLogin() + "\", \"password\": \"" + courier.getPassword() + "\"}";
+        TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
         int id =
                 given()
                         .header("Content-type", "application/json")
                         .and()
-                        .body(json)
+                        .body(login)
                         .when()
                         .post("/api/v1/courier/login").then().extract().body().path("id");
 
         Response responseDelete =
                 given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
                         .delete("/api/v1/courier/{id}", id);
         responseDelete.then().assertThat().body("ok", equalTo(true))
                 .and()
@@ -96,7 +88,7 @@ public class CreatingCourierTest {
 
     @Test
     public void creatingCourierBezLogina() {
-        Courier courier = new Courier("", "10458617", "Andrey");
+        TestDataCourier courier = new TestDataCourier("", "10458617", "Andrey");
         Response response =
                 given()
                         .header("Content-type", "application/json")
@@ -111,7 +103,7 @@ public class CreatingCourierTest {
 
     @Test
     public void creatingCourierBezParolya() {
-        Courier courier = new Courier("Klinikov7", "", "Andrey");
+        TestDataCourier courier = new TestDataCourier("Klinikov7", "", "Andrey");
         Response response =
                 given()
                         .header("Content-type", "application/json")
