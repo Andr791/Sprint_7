@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class CreatingCourierTest {
 
@@ -14,49 +15,15 @@ public class CreatingCourierTest {
     }
 
     @Test
-    public void creatingCourierPozitive() {
-        TestDataCourier courier = new TestDataCourier("Klinikov4", "10458617", "Andrey");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(201);
-
-        TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
-        int id =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(login)
-                        .when()
-                        .post("/api/v1/courier/login").then().extract().body().path("id");
-
-        Response responseDelete =
-                given()
-                        .delete("/api/v1/courier/{id}", id);
-        responseDelete.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(200);
+    public void courierCreatingAndLoginPozitive() {
+        TestDataCourier courier = courierCreate();
+        int id = login(courier);
+        deleteCourier(id);
     }
 
     @Test
     public void creatingCourierPovtor() {
-        TestDataCourier courier = new TestDataCourier("Klinikov7", "10458617", "Andrey");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(201);
+        TestDataCourier courier = courierCreate();
 
         Response responsePovtor =
                 given()
@@ -69,21 +36,9 @@ public class CreatingCourierTest {
                 .and()
                 .statusCode(409);
 
-        TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
-        int id =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(login)
-                        .when()
-                        .post("/api/v1/courier/login").then().extract().body().path("id");
+        int id = login(courier);
 
-        Response responseDelete =
-                given()
-                        .delete("/api/v1/courier/{id}", id);
-        responseDelete.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(200);
+        deleteCourier(id);
     }
 
     @Test
@@ -116,4 +71,46 @@ public class CreatingCourierTest {
                 .statusCode(400);
     }
 
+    //@Step("Создание курьера")
+    public TestDataCourier courierCreate() {
+        TestDataCourier courier = new TestDataCourier("Klinikov4", "10458617", "Andrey");
+        Response response =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(courier)
+                        .when()
+                        .post("/api/v1/courier");
+        response.then().assertThat().body("ok", equalTo(true))
+                .and()
+                .statusCode(201);
+        return courier;
+    }
+
+    //@Step("Залогиниться курьером")
+    public int login(TestDataCourier courier) {
+        TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
+        Response responseLogin =
+                given()
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(login)
+                        .when()
+                        .post("/api/v1/courier/login");
+        responseLogin.then().assertThat().body("id", notNullValue())
+                .and()
+                .statusCode(200);
+        int id = responseLogin.then().extract().body().path("id");
+        return id;
+    }
+
+   // @Step("Удаление курьера")
+    public void deleteCourier(int id) {
+        Response responseDelete =
+                given()
+                        .delete("/api/v1/courier/{id}", id);
+        responseDelete.then().assertThat().body("ok", equalTo(true))
+                .and()
+                .statusCode(200);
+    }
 }
