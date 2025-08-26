@@ -1,14 +1,15 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CourierLoginTest {
 
-    @BeforeEach
+    @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }

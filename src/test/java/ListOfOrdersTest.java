@@ -1,6 +1,7 @@
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
@@ -8,7 +9,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class ListOfOrdersTest {
 
 
-    @BeforeEach
+    @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }

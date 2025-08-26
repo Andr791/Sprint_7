@@ -1,7 +1,9 @@
+import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,7 +11,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class CreatingCourierTest {
 
-    @BeforeEach
+    @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
@@ -71,7 +73,7 @@ public class CreatingCourierTest {
                 .statusCode(400);
     }
 
-    //@Step("Создание курьера")
+  @Step("Создание курьера")
     public TestDataCourier courierCreate() {
         TestDataCourier courier = new TestDataCourier("Klinikov4", "10458617", "Andrey");
         Response response =
@@ -87,7 +89,7 @@ public class CreatingCourierTest {
         return courier;
     }
 
-    //@Step("Залогиниться курьером")
+    @Step("Залогиниться курьером")
     public int login(TestDataCourier courier) {
         TestDataLogin login = new TestDataLogin(courier.getLogin(), courier.getPassword());
         Response responseLogin =
@@ -104,7 +106,7 @@ public class CreatingCourierTest {
         return id;
     }
 
-   // @Step("Удаление курьера")
+   @Step("Удаление курьера")
     public void deleteCourier(int id) {
         Response responseDelete =
                 given()
