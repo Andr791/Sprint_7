@@ -1,3 +1,5 @@
+package pojo;
+
 public class TestDataLogin {
     public String getLogin() {
         return login;

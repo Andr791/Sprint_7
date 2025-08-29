@@ -1,36 +1,28 @@
-import io.restassured.RestAssured;
+package tests;
+
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
+import static steps.Steps.createOrder;
 
 @RunWith(Parameterized.class)
-public class CreatingOrderTest {
+public class CreatingOrderTest extends Predok {
     private String[] color;
 
     public CreatingOrderTest(String[] color) {
         this.color = color;
     }
 
-    @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-    }
-
     @Test
+    @DisplayName("Тест создания нового заказа")
+    @Description("Тут проверяется создание заказа с разными вариантами цветов")
     public void createNewOrder() {
-        TestDataOrder testDataOrder = new TestDataOrder("Naruto", "Uchiha", "Konoha, 142 apt.", "4", "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", color);
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(testDataOrder)
-                        .when()
-                        .post("/api/v1/orders");
+        Response response = createOrder(color);
         response.then().assertThat().body("track", notNullValue())
                 .and()
                 .statusCode(201);

@@ -1,3 +1,5 @@
+package pojo;
+
 public class TestDataOrder {
     private String firstName;
     private String lastName;
